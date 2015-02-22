@@ -4,4 +4,4 @@
 typedef struct kvm {
     int kvm_fd, sys_fd, vcpu_fd;
     void * memory;
-} kvm;
+} kvm_t;
