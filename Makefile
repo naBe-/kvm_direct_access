@@ -13,13 +13,20 @@ OBJDIR = obj
 BINDIR = bin
 
 LIBS = 
-INCLUDE = $(SRCDIR)/*.h
+INCLUDES = includes/
 
 CC = gcc
-CFLAGS = -O2 -Wall -I$(INCLUDE) $(LIBS)
+CFLAGS = -O2 -Wall -I$(INCLUDES) $(LIBS)
 
 SOURCES = $(wildcard $(SRCDIR)/*.c)
 OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
+
+.PHONY: clean all
+
+all: $(OBJDIR) $(BINDIR) $(BINDIR)/$(PROGRAM)
+
+clean:
+	rm -fr $(OBJDIR) $(BINDIR)
 
 $(OBJDIR):
 	mkdir -p $@
@@ -32,11 +39,4 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCLUDE)
 
 $(BINDIR)/$(PROGRAM): $(OBJECTS)
 	$(CC) -o $@ $(OBJECTS) $(LIBS)
-
-all: $(OBJDIR) $(BINDIR) $(BINDIR)/$(PROGRAM)
-
-.PHONY: clean
-
-clean:
-	rm -fr $(OBJDIR) $(BINDIR)
 
