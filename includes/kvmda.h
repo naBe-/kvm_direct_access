@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #define MB 1048576
 
 typedef struct kvm {

@@ -27,6 +27,8 @@ int add_phys_memory(kvm_t * kvm, int mem_size) {
         .memory_size = mem_size * MB,
         .userspace_addr = (__u64)addr
     };
+    
+    kvm->mem_addr = addr;
 
     return ioctl(kvm->vm_fd, KVM_SET_USER_MEMORY_REGION, &region);
 }
