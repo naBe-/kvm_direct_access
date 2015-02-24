@@ -11,6 +11,9 @@ PROGRAM = kvm_da
 SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
+DOCDIR = doc
+
+DOXCONFIG = doxyfile
 
 LIBS = 
 INCLUDES = includes/
@@ -26,8 +29,11 @@ OBJECTS = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SOURCES))
 all: $(OBJDIR) $(BINDIR) $(BINDIR)/$(PROGRAM)
 
 clean:
-	rm -fr $(OBJDIR) $(BINDIR)
+	rm -fr $(OBJDIR) $(BINDIR) $(DOCDIR)
 
+doc:
+	doxygen $(DOXCONFIG)
+			
 $(OBJDIR):
 	mkdir -p $@
 

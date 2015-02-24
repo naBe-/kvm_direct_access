@@ -1,0 +1,7 @@
+
+PROJECT_NAME           = "Initialize VCPU via the KVM kernel module"
+PROJECT_BRIEF          = "Initialize VCPU for later use in KVM virtual machine"
+OUTPUT_DIRECTORY       = "doc"
+INPUT                  = .
+FILE_PATTERNS          = *.c *.h
+RECURSIVE              = YES 
