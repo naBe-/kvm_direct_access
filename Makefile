@@ -34,7 +34,7 @@ $(OBJDIR):
 $(BINDIR):
 	mkdir -p $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c $(INCLUDE)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c 
 	$(CC) $(CFLAGS)  -c $< -o $@
 
 $(BINDIR)/$(PROGRAM): $(OBJECTS)

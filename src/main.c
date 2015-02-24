@@ -11,18 +11,13 @@ int main(int argc, char * argv[]) {
     char key;
     kvm_t kvm;
     int mem_size;
-    char * binary;
 
     mem_size = 256;
-    binary = NULL;
 
     while((key = getopt(argc, argv, "m:b:")) != -1)
         switch(key) {
             case 'm':
                 mem_size = atoi(optarg);
-                break;
-            case 'b':
-                binary = optarg;
                 break;
             case '?':
                 if(optopt == 'm' || optopt == 'b')
@@ -34,12 +29,6 @@ int main(int argc, char * argv[]) {
                 usage(argv[0]);
                 exit(EXIT_SUCCESS);
         }
-
-    if(!binary) {
-        usage(argv[0]);
-        fprintf(stderr, "You must specify a binary to load.\n");
-        exit(EXIT_FAILURE);
-    }
 
     create_vm(&kvm);
     if(add_phys_memory(&kvm, mem_size) < 0) {
