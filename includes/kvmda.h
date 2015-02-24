@@ -6,6 +6,9 @@
  *
  */
 
+#ifndef KVMDA_H
+#define KVMDA_H
+
 #define MB 1048576
 
 /**
@@ -22,3 +25,5 @@ void create_vm(kvm_t * kvm);
 int add_phys_memory(kvm_t * kvm, int mem_size);
 int init_vcpu(kvm_t * kvm);
 int run_vcpu(kvm_t * kvm);
+
+#endif /* KVMDA_H */
