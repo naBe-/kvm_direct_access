@@ -1,14 +1,16 @@
-#include <fnctl.h>
+#include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <linux/kvm.h>
 #include <sys/ioctl.h>
 #include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include "kvmda.h"
 
 void create_vm(kvm_t * kvm) {
-    kvm->kvm_fd = open("/dev/kvm", O_RDRW);
+    kvm->kvm_fd = open("/dev/kvm", O_RDWR);
     kvm->vm_fd = ioctl(kvm->kvm_fd, KVM_CREATE_VM, 0);
     ioctl(kvm->vm_fd, KVM_SET_TSS_ADDR, 0xffffffffffffd000);
     ioctl(kvm->vm_fd, KVM_CREATE_IRQCHIP, 0);
@@ -33,10 +35,13 @@ int init_vcpu(kvm_t * kvm) {
     struct kvm_regs regs;
 
     kvm->vcpu_fd = ioctl(kvm->vm_fd, KVM_CREATE_VCPU, 0);
+    if(kvm->vcpu_fd < 0)
+        return -1;
     ioctl(kvm->vcpu_fd, KVM_GET_REGS, &regs);
     regs.rflags = 0x02;
     regs.rip = 0x100f000;
     ioctl(kvm->vcpu_fd, KVM_SET_REGS, &regs);
+    return 0;
 }
 
 int run_vcpu(kvm_t * kvm) {
@@ -44,7 +49,7 @@ int run_vcpu(kvm_t * kvm) {
     int kvm_run_size;
     struct kvm_run * run_state;
 
-    kvm_run_size = ioctl(kvm->kvm_fd, KVM_GET_CPU_MMAP_SIZE, 0);
+    kvm_run_size = ioctl(kvm->kvm_fd, KVM_GET_VCPU_MMAP_SIZE, 0);
     run_state = mmap(NULL, kvm_run_size, PROT_READ | PROT_WRITE,
             MAP_PRIVATE, kvm->vcpu_fd, 0);
 
@@ -53,5 +58,6 @@ int run_vcpu(kvm_t * kvm) {
 
         
     }
+    return run_state->exit_reason;
 }
 
